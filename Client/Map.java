@@ -14,19 +14,20 @@ public class Map
 
     private String[] nodesNames;
     private int[][] weights;
-
+    private int nodesCount;
+    
     final static String delimiter = ",";
 
     private Map(int verticesCount)
     {
         nodesNames = new String[verticesCount];
         weights = new int[verticesCount][verticesCount];
+        this.nodesCount = verticesCount;
     }
 
-    int getSize() { return weights.length; }
+    public int getNodesCount() { return nodesCount; }
     int[][] getWeights() { return weights; }
     String[] getNodesNames() { return nodesNames; }
-
 
     public static Map fromFile(String filename) throws Exception
     {
@@ -67,8 +68,8 @@ public class Map
 
     void printWeights()
     {
-        for (int i = 0; i < getSize(); ++i) {
-            for (int j = 0; j < getSize(); ++j) {
+        for (int i = 0; i < nodesCount; ++i) {
+            for (int j = 0; j < nodesCount; ++j) {
                 if (weights[i][j] != NO_EDGE)
                     System.out.print(weights[i][j] + " ");
                 else
