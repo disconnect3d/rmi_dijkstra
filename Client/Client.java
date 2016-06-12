@@ -19,11 +19,11 @@ public class Client
 
         if (args.length < 3)
         {
-            System.out.println("Usage: <filename> <host> <server_port...>");
+            System.out.println("Usage: <testcaseNumber> <host> <serverPorts>...");
             return;
         }
 
-        String mapFilename = args[0];
+        String testcaseNumber = args[0];
         String host = args[1];
         String[] serversPorts = new String[args.length - 2];
 
@@ -33,10 +33,11 @@ public class Client
         try
         {
             System.out.println("Getting map");
-            // TODO
+            Map m = Map.fromFile("testcases/testcase" + testcaseNumber);
+            m.printWeights();
 
             System.out.println("Launching Dijkstra");
-            new DijkstraClient(host, serversPorts).run();
+            new DijkstraClient(m, host, serversPorts).run();
         }
         catch(Exception e)
         {
