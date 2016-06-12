@@ -1,7 +1,7 @@
 # Dijkstra algorithm using RMI
 
-all: compile run
-	echo "Build & run completed."
+all: compile
+	@echo "Build completed."
 
 compile: Client/*.java Server/*.java
 	javac Client/*.java
@@ -11,12 +11,12 @@ run:
 	java Server.Server ${REGISTRY_IP} ${PORTS} &
 	java Client.Client ${MAP_FILE} ${REGISTRY_IP} ${PORTS}
 
-runServer:
-	java Server.Server ${PORTS}
+runserver:
+	java Server.Server ${REGISTRY_IP} ${PORTS}
 	
-runClient:
-	java Client.Client ${PORTS}
-		
+runclient:
+	java Client.Client ${MAP_FILE} ${REGISTRY_IP} ${PORTS}
+
 clean:
 	rm Client/*.class
 	rm Server/*.class

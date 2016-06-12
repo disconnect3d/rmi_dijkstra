@@ -15,10 +15,7 @@ public class Client
 {
     public static void main( String args[] ) throws Exception
     {
-        System.out.println("Client started");
-
-        for(int i=0; i<args.length; ++i)
-            System.out.println("Args[" + i + "] = " + args[i]);
+        System.out.println("Client started, args count = " + args.length);
 
         if (args.length < 3)
         {
@@ -31,7 +28,7 @@ public class Client
         String[] serversPorts = new String[args.length - 2];
 
         for(int i=2; i<args.length; ++i)
-            serversPorts[i] = args[i];
+            serversPorts[i-2] = args[i];
 
         try
         {

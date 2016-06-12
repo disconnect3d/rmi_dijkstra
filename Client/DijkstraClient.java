@@ -38,12 +38,12 @@ public class DijkstraClient {
         int currentNode = initialNode;
         
         System.out.println("Sending initial data to workers...");
-        for(int i=0; i<workerServersCount; ++i)
-            /*executorService.execute(new Runnable() {
-                public void run() {
-                    System.out.println("Client worker " + i);
-                }
-            })*/;
+        for(int i=0; i<workerServersCount; ++i) {
+            final int workerIndex = i;
+            executorService.execute(() -> {
+                System.out.println("Client worker " + workerIndex);
+            });
+        }
         executorService.shutdown();
         executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
         System.out.println("Client all workers done - Repeating");
