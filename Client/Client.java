@@ -42,7 +42,7 @@ public class Client
             // TODO
 
             System.out.println("Launching Dijkstra");
-            new DijkstraClient(serversPorts).run();
+            new DijkstraClient(host, serversPorts).run();
         }
         catch(Exception e)
         {
