@@ -1,8 +1,8 @@
 # Java RMI Dijkstra's graph search algorithm
 
-Yet another dijkstra graph search algorithm implemented using Java RMI to distribue work that can be parallelized...
+Yet another Dijkstra graph search algorithm implemented using Java RMI to distribute work that can be parallelized...
 
-It has been written for parallel and distributed systems course on AGH University of Science and Technology.
+Written for parallel and distributed systems course on AGH University of Science and Technology.
 
 # Running
 
