@@ -1,6 +1,10 @@
+package Server;
+
 import java.rmi.*;
 import java.rmi.server.*;
 import java.net.*;
+
+import Shared.*;
 
 public class Server extends UnicastRemoteObject implements ServerInterface
 {
@@ -19,9 +23,10 @@ public class Server extends UnicastRemoteObject implements ServerInterface
 
     public static void main(String args[]) throws Exception
     {
-        String host = InetAddress.getLocalHost().getHostName();
+        String host = args[0];
+        String port = args[1];
 
-        String bindAddr = "//" + host + ":14331/dijkstra" + args[0];
+        String bindAddr = "//" + host + ":" + port + "/dijkstra";
 
         if (System.getSecurityManager() == null)
             Naming.rebind(bindAddr, new Server());

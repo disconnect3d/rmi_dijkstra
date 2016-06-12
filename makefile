@@ -1,43 +1,25 @@
 # Dijkstra algorithm using RMI
 
-LIBS  = 
-CFLAGS = -std=c++11
+all: compile run
+	echo "Build & run completed."
 
-#SRC=$(shell find source -name '*.cpp')
+compile: Client/*.java Server/*.java
+	javac Client/*.java
+	javac Server/*.java
 
-JDK= /usr/lib/jvm/java-8-oracle
-CLASSPATH=dist
-LD_LIBRARY_PATH=dist
-DIST=dist
+run: 
+	java Server.Server ${REGISTRY_IP} ${PORTS} &
+	java Client.Client ${MAP_FILE} ${REGISTRY_IP} ${PORTS}
 
-# Compile all
-all: $(SRC)
-	clear; source ./launcher
+runServer:
+	java Server.Server ${PORTS}
 	
-# Compile all and execute
-xm: all
-	./launcher viewer 8
-	
-# Execute
-x:
-	./launcher viewer 8
-	
-java: server client $(DIST)/java.policy 
-
-server: $(DIST)/Server.java $(DIST)/ServerInterface.java $(DIST)/TaskData.java
-	cd $(DIST); \
-	$(JDK)/bin/javac ServerInterface.java Server.java TaskData.java
-	cd $(DIST); $(JDK)/bin/javah -jni Server
-	
-client: $(DIST)/Client.java 
-	cd $(DIST); $(JDK)/bin/javac Client.java	
-	
-# Clean binary files
+runClient:
+	java Client.Client ${PORTS}
+		
 clean:
-	cd $(DIST); rm -f client *.class *.so *.h *.o
-
-
-
+	rm Client/*.class
+	rm Server/*.class
 
 
 
