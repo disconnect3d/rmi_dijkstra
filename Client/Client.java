@@ -32,9 +32,6 @@ public class Client
 
         try
         {
-            if(System.getSecurityManager() == null)
-                System.setSecurityManager(new SecurityManager());
-
             System.out.println("Getting map");
             // TODO
 

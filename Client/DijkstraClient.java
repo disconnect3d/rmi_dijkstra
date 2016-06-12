@@ -6,23 +6,27 @@ import java.nio.ByteOrder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.rmi.*;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.concurrent.*;
+import java.util.*;
 
 import Shared.*;
 
 public class DijkstraClient {
     public DijkstraClient(String host, String[] serverPorts) throws Exception {
-        workerServers = new ServerInterface[serverPorts.length];
+        workerServersCount = serverPorts.length;
+        workerServers = new ServerInterface[workerServersCount];
         
-        for(int i=0; i<serverPorts.length; ++i)
-            workerServers[i] = (ServerInterface) Naming.lookup("//" + host + ":" + serverPorts[i] + "/dijkstra");
-        
-        executorService = Executors.newFixedThreadPool(serverPorts.length);
+        for(int i=0; i<workerServersCount; ++i) {
+            Registry reg = LocateRegistry.getRegistry(host, Integer.parseInt(serverPorts[i]));
+            workerServers[i] = (ServerInterface) reg.lookup("server");
+        }
+        executor = Executors.newFixedThreadPool(workerServersCount);
     }
     
     private int workerServersCount;
-    private ExecutorService executorService;
+    private ExecutorService executor;
     private ServerInterface[] workerServers;
     //private Map map;
 
@@ -38,23 +42,27 @@ public class DijkstraClient {
         int currentNode = initialNode;
         
         System.out.println("Sending initial data to workers...");
+        
+        List<Callable<Object>> calls = new ArrayList<>();
         for(int i=0; i<workerServersCount; ++i) {
             final int workerIndex = i;
-            executorService.execute(() -> {
+            calls.add(Executors.callable(() -> {
                 System.out.println("Client worker " + workerIndex);
-            });
+            }));
         }
-        executorService.shutdown();
-        executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        executor.invokeAll(calls);
+
         System.out.println("Client all workers done - Repeating");
-        
-        /*
-        for(int i=0; i<serverPorts.length; ++i)
-            executorService.execute(new Runnable() {
-                System.out.println("Client worker " + i);
-            });*/
-        executorService.shutdown();
-        executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+
+        calls = new ArrayList<>();
+        for(int i=0; i<workerServersCount; ++i) {
+            final int workerIndex = i;
+            calls.add(Executors.callable(() -> {
+                System.out.println("Client worker " + workerIndex);
+            }));
+        }
+        executor.invokeAll(calls);
+
         System.out.println("Client all workers done");
     }
 }
