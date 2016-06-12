@@ -140,6 +140,8 @@ public class DijkstraClient {
                 System.out.print(prevNodes[node] + ", ");
         }
         System.out.println("\b\b]");
+        
+        executor.shutdown();
     }
     
     private boolean isConnected(int fromNode, int toNode) {
